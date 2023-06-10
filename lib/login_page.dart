@@ -19,11 +19,12 @@ class _LoginPagestate extends State<LoginPage> {
           // ignore: prefer_const_literals_to_create_immutables
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             SizedBox(
-              height: 20,
+              height: 10,
             ),
 
             Container(
-              height: 30.0,
+              width: 217,
+              height: 53,
               decoration: BoxDecoration(
                 image: DecorationImage(
                     fit: BoxFit.fill, image: AssetImage('assets/logo.png')),
@@ -65,7 +66,7 @@ class _LoginPagestate extends State<LoginPage> {
             ),
 
             SizedBox(
-              height: 10,
+              height: 8,
             ),
 
             // Password text field
@@ -90,7 +91,7 @@ class _LoginPagestate extends State<LoginPage> {
             ),
 
             SizedBox(
-              height: 25,
+              height: 20,
             ),
 
             // Sign in button
@@ -111,7 +112,7 @@ class _LoginPagestate extends State<LoginPage> {
             ),
 
             SizedBox(
-              height: 30,
+              height: 20,
             ),
 
             // not a member? register now
