@@ -1,19 +1,102 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:patientcareapp/components/form_button.dart';
 import 'package:patientcareapp/components/text_fields.dart';
 import 'package:patientcareapp/components/icon_button.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({Key? key});
+class LoginPage extends StatefulWidget {
+  LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   // text editing controllers
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   // User Sign in method
-  void signUserIn() {}
+  void signUserIn() async {
+    //  loading circle
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+
+    // try sign in method
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+    } on FirebaseException catch (e) {
+      // pop the loading circle
+      Navigator.pop(context);
+
+      // If the email is wrong
+      if (e.code == 'usincorrect-email') {
+        // show error to user
+        wrongEmailMessage();
+      }
+
+      // If the password is incorrect
+      else if (e.code == 'incorrect-password') {
+        // show error to user
+        wrongPasswordMessage();
+      }
+    }
+  }
+
+  // popup the incorrect email message
+  void wrongEmailMessage() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.circular(10.0), // Adjust the value as desired
+          ),
+          backgroundColor: Color.fromARGB(255, 232, 230, 230),
+          title: Center(
+            child: Text(
+              'Incorrect email address !!!',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // popup the incorrect password message
+  void wrongPasswordMessage() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.circular(10.0), // Adjust the value as desired
+          ),
+          backgroundColor: Color.fromARGB(255, 232, 230, 230),
+          title: Center(
+            child: Text(
+              'Password is incorrect !!!',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +106,9 @@ class LoginPage extends StatelessWidget {
         child: Center(
           // ignore: prefer_const_literals_to_create_immutables
           child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-
             Container(
               width: 217,
               height: 53,
@@ -39,7 +121,7 @@ class LoginPage extends StatelessWidget {
               margin: const EdgeInsets.only(top: 50),
             ),
 
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
 
@@ -49,29 +131,29 @@ class LoginPage extends StatelessWidget {
                     fontFamily: 'Raleway',
                     fontWeight: FontWeight.bold)),
 
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
 
             // Email Field
             FormTextField(
-              controller: usernameController,
+              controller: emailController,
               hintText: 'Enter Your Email',
               obscureText: false,
             ),
 
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
 
             // Password text field
             FormTextField(
-              controller: null,
+              controller: passwordController,
               hintText: 'Enter Your Password',
               obscureText: true,
             ),
 
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
 
@@ -90,14 +172,14 @@ class LoginPage extends StatelessWidget {
               ),
             ),
 
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
 
             // Sign in button
             FormButton(onTap: signUserIn),
 
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
 
@@ -129,7 +211,7 @@ class LoginPage extends StatelessWidget {
               ),
             ),
 
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
 
@@ -139,7 +221,7 @@ class LoginPage extends StatelessWidget {
                 // Google button
                 SquarTile(imagePath: 'assets/google.png'),
 
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
 
@@ -148,7 +230,7 @@ class LoginPage extends StatelessWidget {
               ],
             ),
 
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
 
@@ -162,13 +244,13 @@ class LoginPage extends StatelessWidget {
                   style: TextStyle(
                       fontWeight: FontWeight.bold, fontFamily: 'Raleway'),
                 ),
-                Text(
+                const Text(
                   " Register Now",
                   style: TextStyle(
                       color: Colors.blue,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Raleway'),
-                )
+                ),
               ],
             ),
           ]),
