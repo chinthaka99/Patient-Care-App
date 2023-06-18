@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -27,57 +27,90 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
 
+// Try sign in
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
-    } on FirebaseException catch (e) {
+      // pop the loading circle
       Navigator.pop(context);
-
-      if (e.code == 'usincorrect-email') {
+    } on FirebaseAuthException catch (e) {
+      // pop the loading circle
+      Navigator.pop(context);
+      // WRONG EMAIL
+      if (e.code == 'user-not-found') {
+        // show error to user
         wrongEmailMessage();
-      } else if (e.code == 'incorrect-password') {
+      }
+
+      // WRONG PASSWORD
+      else if (e.code == 'wrong-password') {
+        // show error to user
         wrongPasswordMessage();
       }
     }
   }
 
+// Popup incorrect email address message
   void wrongEmailMessage() {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(30.0),
           ),
-          backgroundColor: Color.fromARGB(255, 232, 230, 230),
-          title: Center(
-            child: Text(
-              'Incorrect email address !!!',
-              style: TextStyle(color: Colors.red),
+          content: Container(
+            width: 75,
+            height: 40,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Email is Incorrect !!!',
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 240, 197, 6),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
           ),
+          backgroundColor: Color.fromARGB(255, 2, 152, 127),
         );
       },
     );
   }
 
+// Popup incorrect password address message
   void wrongPasswordMessage() {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(30.0),
           ),
-          backgroundColor: Color.fromARGB(255, 232, 230, 230),
-          title: Center(
-            child: Text(
-              'Password is incorrect !!!',
-              style: TextStyle(color: Colors.red),
+          content: Container(
+            width: 100,
+            height: 40,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Incorrect Password !!!",
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 240, 197, 6),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
           ),
+          backgroundColor: Color.fromARGB(255, 2, 152, 127),
         );
       },
     );
